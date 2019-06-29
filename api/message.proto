@@ -1,0 +1,31 @@
+syntax = "proto3";
+package api;
+
+// services
+
+service Publisher {
+    rpc Publish(Message) returns (Acknowledgement) {}
+}
+
+service Consumer {
+    rpc Consume(ReadRequest) returns (stream ReadResponse) {}
+}
+
+// types
+
+message Message {
+    bytes data = 1;
+}
+
+message Acknowledgement {
+    int64 offset = 1;
+}
+
+message ReadRequest {
+    int64 offset = 1;
+}
+
+message ReadResponse {
+    int64 offset = 1;
+    bytes data = 2;
+}
