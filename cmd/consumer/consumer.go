@@ -61,7 +61,7 @@ func errmain() error {
 		b := m.GetData()
 		i := bytes.IndexByte(b, byte(0))
 		if i > 0 {
-			log.Printf("offset: %10d, data: %q", m.GetOffset(), string(b[:i]))
+			log.Printf("offset: %10d, nextOffset: %10d, data: %q", m.GetOffset(), m.GetNextOffset(), string(b[:i]))
 		}
 	}
 }

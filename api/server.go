@@ -130,8 +130,9 @@ func (s *server) Consume(r *ReadRequest, stream Consumer_ConsumeServer) error {
 			return logErr(errors.Wrapf(err, "only read %d bytes, expected %d bytes", readlen, s.messageSize))
 		}
 		if err := stream.Send(&ReadResponse{
-			Offset: offset,
-			Data:   b,
+			Data:       b,
+			Offset:     offset,
+			NextOffset: offset + int64(s.messageSize),
 		}); err != nil {
 			return logErr(errors.Wrapf(err, "stream send"))
 		}
