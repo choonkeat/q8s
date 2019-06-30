@@ -10,6 +10,9 @@ import (
 
 	"github.com/choonkeat/q8s/api"
 	"golang.org/x/sync/errgroup"
+
+	"net/http"
+	_ "net/http/pprof"
 )
 
 func main() {
@@ -20,9 +23,11 @@ func main() {
 
 func errmain() error {
 	var addr string
+	var pprofAddr string
 	var filename string
 	var messageSize int
 	flag.StringVar(&addr, "addr", "localhost:8185", "address to listen")
+	flag.StringVar(&pprofAddr, "pprof-addr", "localhost:8184", "address of pprof webserver")
 	flag.StringVar(&filename, "filename", "file.log", "log flie")
 	flag.IntVar(&messageSize, "message-size", 1024, "max size per message")
 	flag.Parse()
@@ -35,6 +40,10 @@ func errmain() error {
 	go func() {
 		<-sigc
 		cancel()
+	}()
+
+	go func() {
+		log.Println(http.ListenAndServe(pprofAddr, nil))
 	}()
 
 	return runCtxFuncs(ctx,
